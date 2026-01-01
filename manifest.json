@@ -1,0 +1,58 @@
+{
+  "name": "Exam Master SL - Study Companion",
+  "short_name": "ExamMaster",
+  "description": "Sri Lanka's most advanced exam countdown and study assistant with AI support",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e27",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://api.dicebear.com/7.x/shapes/svg?seed=exam&backgroundColor=667eea",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://api.dicebear.com/7.x/shapes/svg?seed=exam&backgroundColor=667eea",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [
+    {
+      "src": "https://via.placeholder.com/540x720/667eea/ffffff?text=Exam+Master",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Study Timer",
+      "short_name": "Timer",
+      "description": "Start a study session",
+      "url": "/#timer",
+      "icons": [{ "src": "https://api.dicebear.com/7.x/shapes/svg?seed=timer", "sizes": "96x96" }]
+    },
+    {
+      "name": "AI Assistant",
+      "short_name": "AI",
+      "description": "Ask the AI assistant",
+      "url": "/#ai",
+      "icons": [{ "src": "https://api.dicebear.com/7.x/shapes/svg?seed=ai", "sizes": "96x96" }]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

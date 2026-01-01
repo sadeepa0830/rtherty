@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Master SL - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Admin Specific Styles */
+        body {
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card-header {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            border-radius: 5px;
+        }
+        
+        .btn-primary {
+            background: var(--accent-color);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .list-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        
+        .list-item {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .delete-btn {
+            color: var(--danger);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        #loginSection {
+            max-width: 400px;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+<body data-theme="midnight">
+
+    <!-- Toast Notification -->
+    <div id="toast" style="position: fixed; bottom: 20px; right: 20px; background: var(--accent-color); color: #fff; padding: 10px 20px; border-radius: 5px; display: none; z-index: 10000;"></div>
+
+    <!-- Login Section -->
+    <div id="loginSection" class="glass-card">
+        <h2 style="text-align: center; margin-bottom: 1rem;">Admin Login</h2>
+        <div class="form-group">
+            <input type="email" id="adminEmail" class="form-control" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <input type="password" id="adminPassword" class="form-control" placeholder="Password">
+        </div>
+        <button class="btn-primary" onclick="window.adminLogin()">Login</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardSection" style="display: none;">
+        <div class="admin-header">
+            <h1><i class="fas fa-tools"></i> Admin Dashboard</h1>
+            <button class="btn-primary" style="width: auto; background: var(--danger);" onclick="window.logout()">Logout</button>
+        </div>
+
+        <div class="admin-grid">
+            
+            <!-- Seasonal Effects -->
+            <div class="glass-card">
+                <div class="card-header"><i class="fas fa-magic"></i> Seasonal Effects</div>
+                
+                <div class="toggle-container">
+                    <span>Snow Effect (හිම වැටීම)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="snowToggle" onchange="window.toggleEffect('snow_effect', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-container">
+                    <span>Confetti Effect (කොන්ෆෙටි)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="confettiToggle" onchange="window.toggleEffect('confetti_effect', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="glass-card">
+                <div class="card-header"><i class="fas fa-bell"></i> Send Notification</div>
+                <div class="form-group">
+                    <input type="text" id="notifTitle" class="form-control" placeholder="Title (මාතෘකාව)">
+                </div>
+                <div class="form-group">
+                    <textarea id="notifMessage" class="form-control" rows="3" placeholder="Message (පණිවිඩය)"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Image URL (Optional)</label>
+                    <input type="text" id="notifImage" class="form-control" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>PDF URL (Optional)</label>
+                    <input type="text" id="notifPDF" class="form-control" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="notifPersistent"> Show until dismissed (දිගටම පෙන්වන්න)
+                    </label>
+                </div>
+                <button class="btn-primary" onclick="window.sendNotification()">Send Notification</button>
+
+                <div class="card-header" style="margin-top: 2rem;">Active Notifications</div>
+                <div id="activeNotifsList" class="list-container">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+            <!-- Manage Quotes -->
+            <div class="glass-card">
+                <div class="card-header"><i class="fas fa-quote-left"></i> Add Motivation Quote</div>
+                <div class="form-group">
+                    <textarea id="quoteText" class="form-control" rows="3" placeholder="Quote Text"></textarea>
+                </div>
+                <button class="btn-primary" onclick="window.addQuote()">Add Quote</button>
+                
+                <div class="card-header" style="margin-top: 2rem;">Recent Quotes</div>
+                <div id="quotesList" class="list-container">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

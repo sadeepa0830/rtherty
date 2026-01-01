@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Master SL - Premium</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-theme="midnight">
+
+    <!-- Seasonal Effects Canvas -->
+    <canvas id="effectCanvas"></canvas>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i> Exam Master SL
+        </div>
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="window.openNotifModal()" title="Notifications">
+                <i class="fas fa-bell"></i>
+                <div id="notifBadge" class="badge-dot"></div>
+            </button>
+            <button class="icon-btn" onclick="window.toggleThemeModal()" title="Themes">
+                <i class="fas fa-palette"></i>
+            </button>
+            <button class="icon-btn" onclick="window.location.href='admin.html'" title="Admin">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section (Exam Timer) -->
+        <div class="glass-card" id="heroSection">
+            <h2 id="examBadgeText" style="text-align: center; margin-bottom: 1rem;">2025 A/L - තව කොපමණ කල්ද?</h2>
+            
+            <!-- Countdown Grid -->
+            <div style="display: flex; justify-content: space-around; text-align: center; margin: 2rem 0;">
+                <div>
+                    <h1 id="days" style="font-size: 2.5rem; color: var(--accent-color);">00</h1>
+                    <small>දින</small>
+                </div>
+                <div>
+                    <h1 id="hours" style="font-size: 2.5rem; color: var(--accent-color);">00</h1>
+                    <small>පැය</small>
+                </div>
+                <div>
+                    <h1 id="minutes" style="font-size: 2.5rem; color: var(--accent-color);">00</h1>
+                    <small>විනාඩි</small>
+                </div>
+                <div>
+                    <h1 id="seconds" style="font-size: 2.5rem; color: var(--accent-color);">00</h1>
+                    <small>තත්පර</small>
+                </div>
+            </div>
+            
+            <!-- Exam Selector -->
+            <div id="examGrid" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                <!-- JS will populate this -->
+            </div>
+        </div>
+
+        <!-- Motivation Section -->
+        <div class="glass-card motivation-section">
+            <h3><i class="fas fa-lightbulb"></i> දවසේ සිතුවිල්ල</h3>
+            <div id="dailyQuote" class="quote-text">
+                "ජයග්‍රහණය යනු කුඩා උත්සාහයන්ගේ එකතුවකි."
+            </div>
+            <button id="readMoreBtn" class="read-more-btn" onclick="window.toggleQuote()">Read More</button>
+        </div>
+
+        <!-- Comment Section (Public Chat) -->
+        <div class="glass-card">
+            <h3><i class="fas fa-comments"></i> කතාබහ (Community Chat)</h3>
+            <div style="margin: 1rem 0;">
+                <input type="text" id="chatName" placeholder="ඔබේ නම (Your Name)" class="chat-input" style="margin-bottom: 10px; width: 100%;">
+                
+                <div id="chatBox" class="chat-container">
+                    <!-- Chat messages will load here -->
+                    <div style="text-align: center; color: var(--text-secondary);">පූරණය වෙමින්...</div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chatMessage" placeholder="පණිවිඩය ටයිප් කරන්න..." class="chat-input">
+                    <button class="chat-btn" onclick="window.sendComment()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>Exam Master SL</h3>
+                <p>ඔබේ විභාග ජයග්‍රහණය සඳහා හොඳම සහායකයා. අපි ඔබ සමඟයි.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-youtube fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp fa-lg"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">මුල් පිටුව</a></li>
+                    <li><a href="#">අප ගැන</a></li>
+                    <li><a href="#">සම්බන්ධ වන්න</a></li>
+                    <li><a href="admin.html">Admin Login</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> support@exammaster.lk</p>
+                <p><i class="fas fa-phone"></i> +94 77 123 4567</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    
+    <!-- Theme Modal -->
+    <div id="themeModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="window.toggleThemeModal()">&times;</span>
+            <h2>තේමාව වෙනස් කරන්න (Select Theme)</h2>
+            <div class="theme-grid">
+                <div class="theme-option" onclick="window.setTheme('midnight')">Midnight</div>
+                <div class="theme-option" onclick="window.setTheme('daylight')">Daylight</div>
+                <div class="theme-option" onclick="window.setTheme('ocean')">Ocean</div>
+                <div class="theme-option" onclick="window.setTheme('forest')">Forest</div>
+                <div class="theme-option" onclick="window.setTheme('sunset')">Sunset</div>
+                <div class="theme-option" onclick="window.setTheme('cyberpunk')">Neon</div>
+                <div class="theme-option" onclick="window.setTheme('royal')">Royal</div>
+                <div class="theme-option" onclick="window.setTheme('coffee')">Coffee</div>
+                <div class="theme-option" onclick="window.setTheme('lavender')">Lavender</div>
+                <div class="theme-option" onclick="window.setTheme('slate')">Slate</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notifModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="window.closeNotifModal()">&times;</span>
+            <h2 id="modalNotifTitle">නිවේදන (Notifications)</h2>
+            <div id="modalNotifContent">
+                <!-- Content injected via JS -->
+                <p>දැනට විශේෂ නිවේදන නොමැත.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Logic -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
