@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Exam Master SL</title>
+    
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS (Reuse style.css for theme consistency + inline overrides) -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-container { max-width: 800px; margin: 50px auto; padding: 20px; }
+        .dashboard-section { display: none; }
+        .list-item { 
+            background: rgba(255,255,255,0.05); 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            border-radius: 8px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .delete-btn { background: var(--danger); border: none; padding: 5px 10px; color: white; cursor: pointer; border-radius: 4px; }
+        .toggle-switch { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div id="toast" style="display:none; position:fixed; top:20px; right:20px; background:var(--success); color:#000; padding:15px; border-radius:8px; z-index:2000;"></div>
+
+    <div class="admin-container">
+        <h1 style="text-align: center; margin-bottom: 30px; color: var(--secondary-neon);">Admin Control Center</h1>
+
+        <!-- LOGIN SECTION -->
+        <div id="loginSection" class="glass-panel" style="padding: 40px; text-align: center;">
+            <h2 style="margin-bottom: 20px;">Login Required</h2>
+            <input type="email" id="adminEmail" class="glass-input" placeholder="Email" style="margin-bottom: 15px;">
+            <input type="password" id="adminPassword" class="glass-input" placeholder="Password" style="margin-bottom: 20px;">
+            <button class="glass-btn" onclick="window.adminLogin()" style="width: 100%;">Login</button>
+        </div>
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboardSection" class="dashboard-section">
+            <div style="text-align: right; margin-bottom: 20px;">
+                <button class="glass-btn" onclick="window.logout()" style="background: var(--danger);">Logout</button>
+            </div>
+
+            <!-- 1. Send Notification (Advanced) -->
+            <div class="glass-panel" style="padding: 25px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-bullhorn"></i> Send New Notification</h3>
+                
+                <input type="text" id="notifTitle" class="glass-input" placeholder="Title (මාතෘකාව)" style="margin-bottom: 15px;">
+                <textarea id="notifMessage" class="glass-input" placeholder="Message (පණිවිඩය)" rows="4" style="margin-bottom: 15px;"></textarea>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 5px; color: var(--text-muted);">Upload Image or PDF:</label>
+                    <input type="file" id="uploadFile" class="glass-input">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="notifPersistent"> Show until dismissed (දිගටම පෙන්වන්න)
+                    </label>
+                </div>
+
+                <button class="glass-btn" onclick="window.sendNotification()" id="sendBtn">Send Notification</button>
+            </div>
+
+            <!-- 2. Site Effects -->
+            <div class="glass-panel" style="padding: 25px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-magic"></i> Site Effects</h3>
+                
+                <div class="toggle-switch">
+                    <input type="checkbox" id="snowToggle" onchange="window.toggleEffect('snow_effect', this.checked)">
+                    <label>Snow Effect (හිම වැටීම)</label>
+                </div>
+                
+                <div class="toggle-switch">
+                    <input type="checkbox" id="confettiToggle" onchange="window.toggleEffect('confetti_effect', this.checked)">
+                    <label>Confetti Effect (කොන්ෆෙටි)</label>
+                </div>
+            </div>
+
+            <!-- 3. Manage Active Notifications -->
+            <div class="glass-panel" style="padding: 25px;">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-list"></i> Active Notifications</h3>
+                <div id="activeNotifsList">
+                    <!-- Loaded dynamically -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="admin.js"></script>
+
+</body>
+</html>

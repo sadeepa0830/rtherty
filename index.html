@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Master SL - Advanced Student Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@400;600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Effects Canvas (Snow/Confetti) -->
+    <canvas id="effectCanvas"></canvas>
+
+    <!-- Header Section -->
+    <header>
+        <h1>EXAM MASTER SL</h1>
+        <p class="subtitle">ඔබගේ විභාග ජයග්‍රහණයේ මග පෙන්වන්නා</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- SECTION 1: Countdown Dashboard (Ape Danuma Style) -->
+        <div class="countdown-grid" id="examGrid">
+            <!-- Dynamic Countdown Cards will be injected here via app.js -->
+            <!-- Placeholder to show structure before JS loads -->
+            <div class="glass-panel countdown-card">
+                <h2>Loading Exams...</h2>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Chat & Community (Glassmorphism) -->
+        <div class="glass-panel chat-section">
+            <div class="chat-header">
+                <h3><i class="fas fa-comments"></i> පොදු සාකච්ඡා මණ්ඩපය</h3>
+                <div style="font-size: 0.9rem; color: var(--secondary-neon);">
+                    <i class="fas fa-circle" style="font-size: 8px;"></i> Online
+                </div>
+            </div>
+            
+            <div class="chat-box" id="chatBox">
+                <!-- Chat messages will appear here -->
+                <div class="chat-msg other">
+                    <span class="chat-meta">System • Just Now</span>
+                    සාදරයෙන් පිළිගනිමු! මෙතැනදී ඔබට ගැටළු සාකච්ඡා කළ හැක.
+                </div>
+            </div>
+
+            <div class="chat-controls">
+                <input type="text" id="chatName" class="glass-input" placeholder="ඔබේ නම" style="width: 30%;">
+                <input type="text" id="chatMessage" class="glass-input" placeholder="පණිවිඩය ඇතුලත් කරන්න...">
+                <button class="glass-btn" onclick="window.sendComment()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Notification Modal (Advanced: Image/PDF Support) -->
+    <div id="notifModal" class="modal-overlay">
+        <div class="glass-panel modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-bell"></i> විශේෂ නිවේදන</h3>
+                <button class="modal-close" onclick="window.closeNotifModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalNotifContent">
+                <!-- Dynamic Content: Image or PDF Button -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h3>Exam Master SL</h3>
+                <p style="color: var(--text-muted); line-height: 1.6;">
+                    උසස් පෙළ සිසුන් සඳහා සකසන ලද, තාක්ෂණයෙන් පිරිපුන් අධ්‍යාපනික අත්වැල.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h3>ක්ෂණික සබැඳි</h3>
+                <ul>
+                    <li><a href="#">මුල් පිටුව</a></li>
+                    <li><a href="#">විෂය නිර්දේශ</a></li>
+                    <li><a href="#">පසුගිය ප්‍රශ්න පත්‍ර</a></li>
+                    <li><a href="#">ගුරුවරුන්</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>සම්බන්ධ වන්න</h3>
+                <ul>
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+                    <li><a href="#"><i class="fab fa-telegram"></i> Telegram Group</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Exam Master SL. All Rights Reserved. Designed with <span style="color: var(--primary-neon);">♥</span> in Sri Lanka.
+        </div>
+    </footer>
+
+    <!-- Notification Badge (Hidden by default, toggled via JS) -->
+    <div id="notifBadge" style="display:none; position:fixed; bottom:20px; right:20px; background:var(--danger); color:white; width:50px; height:50px; border-radius:50%; text-align:center; line-height:50px; cursor:pointer; box-shadow: 0 0 15px var(--danger); z-index:100;" onclick="window.openNotifModal()">
+        <i class="fas fa-bell"></i>
+    </div>
+
+    <!-- Main Logic -->
+    <script type="module" src="app.js"></script>
+
+</body>
+</html>
